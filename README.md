@@ -12,9 +12,9 @@ In **Qubit Roll**, your movement is your power. As you roll the cube, its faces 
 
 | Ability | Face Color | Description |
 | :--- | :--- | :--- |
-| **Heisenberg's Dash** | 🔴 Red | Instantly slide 2 tiles. Essential for striking down Red Enemies. |
-| **Schrödinger's Split** | 🔵 Blue | Divide into two entangled cubes. Be in two places at once to tackle complex puzzles. |
-| **Quantum Tunneling** | 🟢 Green | Phase directly through solid walls into the adjacent space. |
+| **Heisenberg's Dash** | 🔴Red | Instantly slide 2 tiles. Essential for striking down Red Enemies. |
+| **Schrödinger's Split** | 🔵Blue | Divide into two entangled cubes. Be in two places at once to tackle complex puzzles. |
+| **Quantum Tunneling** | 🟢Green | Phase directly through solid walls into the adjacent space. |
 
 ### 👾 The Adversaries
 - **Red Enemies**: Standard drones. Can only be killed via a **Heisenberg Dash**.
