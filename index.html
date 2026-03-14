@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qubit Roll</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Left UI Pane -->
+        <div id="left-pane">
+            <div id="header">
+                <div id="header-text">
+                    <h1>Qubit Roll</h1>
+                    <div id="face-indicator">
+                        <span id="face-icon"></span>
+                        <p id="top-face">Top Face: <span id="face-name">INERT_1</span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="instructions-container">
+                <div id="instructions">WASD: Roll | SPACE: Ability</div>
+            </div>
+            
+            <div id="preview-panel">
+                <div id="predictions">
+                    <p>W / &uarr; : <span id="pred-up">Inert</span></p>
+                    <p>S / &darr; : <span id="pred-down">Inert</span></p>
+                    <p>A / &larr; : <span id="pred-left">Inert</span></p>
+                    <p>D / &rarr; : <span id="pred-right">Inert</span></p>
+                </div>
+                <div class="cube-wrapper">
+                    <p id="rotate-hint">Q/E: Rotate in place</p>
+                    <div id="scene">
+                        <div id="cube">
+                            <div class="cube-face cube-front"></div>
+                            <div class="cube-face cube-right"></div>
+                            <div class="cube-face cube-top"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Game Pane -->
+        <div id="right-pane">
+            <div id="level-name-display" class="hidden"></div>
+            <div id="powerup-container"></div>
+            <canvas id="gameCanvas"></canvas>
+        </div>
+    </div>
+    
+    <div id="level-menu" class="fullscreen-overlay">
+        <h1 class="gradient-text">SELECT LEVEL</h1>
+        <div id="level-grid">
+            <!-- Level buttons dynamically injected here -->
+        </div>
+    </div>
+    
+    <div id="game-over-screen" class="hidden fullscreen-overlay">
+        <h1 class="red-text">YOU DIED</h1>
+        <p class="restart-prompt">Press R to Restart</p>
+    </div>
+    <div id="win-screen" class="hidden fullscreen-overlay">
+        <h1 class="green-text">WINNER!</h1>
+        <p class="restart-prompt">Press R to Restart</p>
+    </div>
+
+    <button id="menu-btn">☰</button>
+    
+    <aside id="rules-sidebar" class="hidden">
+        <button id="close-sidebar">&times;</button>
+        <h2>Game Rules</h2>
+        <ul>
+            <li><strong>Roll:</strong> Use WASD or Arrows to move your cube.</li>
+            <li><strong>Rotate:</strong> Q and E spin the cube in place.</li>
+            <li><strong>Red Face (Dash):</strong> Dashing lets you slide 2 tiles instantly. You must use this to kill Red Enemies.</li>
+            <li><strong>Blue Face (Split):</strong> Schrodinger's Split divides you into two entangled cubes. Press SPACE again to instantly collapse back to the Parent (<span style="color:#fef08a">★</span>).</li>
+            <li><strong>Green Face (Tunnel):</strong> Quantum Tunneling allows you to step directly through a wall into the next space.</li>
+            <li><strong>Cyan Enemies:</strong> These are entangled. You must hit one while you are also Split (Blue) to kill it.</li>
+        </ul>
+        
+        <div id="hint-container">
+            <button id="toggle-hint-btn">Show Tactical Hint</button>
+            <p id="level-hint" class="hidden"></p>
+        </div>
+    </aside>
+
+    <script src="levels.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
