@@ -87,7 +87,7 @@ class GridManager {
 }
 
 class Player {
-    constructor(x, y, gridManager) {
+    constructor(x, y, gridManager, initialFaces) {
         this.gridX = x;
         this.gridY = y;
         this.gridManager = gridManager;
@@ -109,7 +109,7 @@ class Player {
         
         this.yRotation = 0; // Visual track of cube rotation in UI
         
-        this.faces = {
+        this.faces = initialFaces || {
             top: FaceType.INERT_1,
             front: FaceType.RED,
             right: FaceType.BLUE,
@@ -494,7 +494,7 @@ class Game {
         this.grid = new GridManager(lvlData.width, lvlData.height);
         this.grid.setMap(lvlData.walls);
         
-        this.players = [new Player(lvlData.player.x, lvlData.player.y, this.grid)];
+        this.players = [new Player(lvlData.player.x, lvlData.player.y, this.grid, lvlData.initialFaces)];
         this.enemies = [];
         this.particles.particles = [];
         

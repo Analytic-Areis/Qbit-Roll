@@ -116,15 +116,69 @@ h1 {
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-#predictions p {
+/* Predictions Alignment & Styling */
+#predictions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.pred-row {
+    display: flex;
+    align-items: center;
     font-size: 1.1rem;
     color: #94a3b8;
-    margin-bottom: 0.5rem;
     font-weight: 500;
 }
 
-#predictions span {
+.pred-label {
+    width: 160px; /* Fixed width for perfect colon alignment */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.pred-colon {
+    margin-right: 1.25rem;
+    color: #334155;
+    font-weight: bold;
+}
+
+#predictions span[id^="pred-"] {
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
     font-weight: 700;
+    color: #f8fafc; /* Premium white text */
+    min-width: 200px;
+    text-align: center;
+    background: rgba(148, 163, 184, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Prediction Face Highlights - Brighter for visibility */
+#predictions .face-red { 
+    background: #ef4444 !important; 
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+#predictions .face-blue { 
+    background: #3b82f6 !important; 
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+#predictions .face-green { 
+    background: #10b981 !important; 
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+#predictions .face-inert { 
+    background: rgba(71, 85, 105, 0.3) !important;
+    color: #94a3b8 !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+    text-shadow: none;
 }
 
 .cube-wrapper {

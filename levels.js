@@ -11,7 +11,10 @@ const GameLevels = [
         enemies: [
             { x: 3, y: 1, entangled: false }
         ],
-        walls: []
+        walls: [],
+        initialFaces: {
+            top: 'INERT_1', front: 'RED', right: 'INERT_2', back: 'INERT_3', left: 'INERT_1', bottom: 'INERT_2'
+        }
     },
     {
         title: "Level 2: The Curious Tunnel",
@@ -33,7 +36,10 @@ const GameLevels = [
             // The gap is at y=3
             
             [5, 3]                  // Additional block to force a split
-        ]
+        ],
+        initialFaces: {
+            top: 'INERT_1', front: 'RED', right: 'INERT_2', back: 'INERT_3', left: 'GREEN', bottom: 'INERT_2'
+        }
     },
     {
         title: "Level 3: Ghost Protocol",
@@ -49,7 +55,10 @@ const GameLevels = [
             // A 1-block thick vertical wall column at x=4 separating player (x:1-3) from enemy (x:5)
             // It blocks the entire 5-tall playable height
             [4, 1], [4, 2], [4, 3], [4, 4], [4, 5]
-        ]
+        ],
+        initialFaces: {
+            top: 'INERT_1', front: 'RED', right: 'INERT_2', back: 'INERT_3', left: 'GREEN', bottom: 'INERT_2'
+        }
     },
     {
         title: "Level 4: Quantum Entanglement",
@@ -64,7 +73,10 @@ const GameLevels = [
         ],
         walls: [
             [4, 3], [5, 3]
-        ]
+        ],
+        initialFaces: {
+            top: 'INERT_1', front: 'RED', right: 'BLUE', back: 'INERT_3', left: 'GREEN', bottom: 'INERT_2'
+        }
     },
     {
         title: "Level 5: The Quantum Enigma",
@@ -83,6 +95,9 @@ const GameLevels = [
             [5, 4], [6, 4], [7, 4], // Center divide
             [8, 2], [8, 3], [8, 5], [8, 6], // Inner chambers
             [9, 4]
-        ]
+        ],
+        initialFaces: {
+            top: 'INERT_1', front: 'RED', right: 'BLUE', back: 'INERT_3', left: 'GREEN', bottom: 'INERT_2'
+        }
     }
 ];

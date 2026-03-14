@@ -27,10 +27,26 @@
             
             <div id="preview-panel">
                 <div id="predictions">
-                    <p>UP: W / &uarr; : <span id="pred-up">Inert</span></p>
-                    <p>DOWN: S / &darr; : <span id="pred-down">Inert</span></p>
-                    <p>LEFT: A / &larr; : <span id="pred-left">Inert</span></p>
-                    <p>RIGHT: D / &rarr; : <span id="pred-right">Inert</span></p>
+                    <div class="pred-row">
+                        <span class="pred-label">UP: W / &uarr;</span>
+                        <span class="pred-colon">:</span>
+                        <span id="pred-up">Inert</span>
+                    </div>
+                    <div class="pred-row">
+                        <span class="pred-label">DOWN: S / &darr;</span>
+                        <span class="pred-colon">:</span>
+                        <span id="pred-down">Inert</span>
+                    </div>
+                    <div class="pred-row">
+                        <span class="pred-label">LEFT: A / &larr;</span>
+                        <span class="pred-colon">:</span>
+                        <span id="pred-left">Inert</span>
+                    </div>
+                    <div class="pred-row">
+                        <span class="pred-label">RIGHT: D / &rarr;</span>
+                        <span class="pred-colon">:</span>
+                        <span id="pred-right">Inert</span>
+                    </div>
                 </div>
                 <div class="cube-wrapper">
                     <p id="rotate-hint">Q/E: Rotate in place</p>
