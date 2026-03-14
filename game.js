@@ -257,6 +257,28 @@ class Player {
         ctx.arc(px + size / 2, py + size / 2, size / 3, 0, Math.PI * 2);
         ctx.fill();
         
+        // Forward arrow pointing UP
+        ctx.fillStyle = '#000';
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+        
+        const cx = px + size / 2;
+        
+        // Line
+        ctx.beginPath();
+        ctx.moveTo(cx, py + 16);
+        ctx.lineTo(cx, py + 6);
+        ctx.stroke();
+        
+        // Arrowhead
+        ctx.beginPath();
+        ctx.moveTo(cx, py + 4);
+        ctx.lineTo(cx - 4, py + 10);
+        ctx.lineTo(cx + 4, py + 10);
+        ctx.fill();
+        
         // If tunnel or dash moving, add a trail effect maybe? (Handled simply by smooth movement for now)
         
         if (this.isParent && playerCount > 1) {
