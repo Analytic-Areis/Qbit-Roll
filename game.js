@@ -423,6 +423,10 @@ class Game {
         this.toggleHintBtn = document.getElementById('toggle-hint-btn');
         this.levelHint = document.getElementById('level-hint');
         
+        // 3D cube animation element
+        this.cubeEl = document.getElementById('cube');
+        this.cubeAnimTimeout = null;
+        
         this.currentLevelIndex = 0;
         this.unlockedLevels = 1; // Unlocks as you win
         this.inMenu = true;
@@ -463,6 +467,27 @@ class Game {
                 this.toggleHintBtn.innerText = "Show Tactical Hint";
             }
         });
+    }
+
+    triggerCubeAnimation(animClass) {
+        if (!this.cubeEl) return;
+        
+        // Remove any existing animation classes
+        this.cubeEl.classList.remove('roll-up', 'roll-down', 'roll-left', 'roll-right', 'spin-cw', 'spin-ccw');
+        
+        // Force reflow to re-trigger animation if it's the same class
+        void this.cubeEl.offsetWidth;
+        
+        // Apply the new animation class
+        this.cubeEl.classList.add(animClass);
+        
+        // Clear any previous timeout
+        if (this.cubeAnimTimeout) clearTimeout(this.cubeAnimTimeout);
+        
+        // Remove the class after animation completes (350ms matches CSS duration)
+        this.cubeAnimTimeout = setTimeout(() => {
+            this.cubeEl.classList.remove(animClass);
+        }, 380);
     }
 
     buildMenu() {
@@ -662,8 +687,10 @@ class Game {
         if (!this.collapseMode && !this.dashSelectionMode && !this.tunnelSelectionMode) {
             if (this.isPressed('q')) {
                 this.players.forEach(p => p.rotateY(-1));
+                this.triggerCubeAnimation('spin-ccw');
             } else if (this.isPressed('e')) {
                 this.players.forEach(p => p.rotateY(1));
+                this.triggerCubeAnimation('spin-cw');
             }
         }
 
@@ -696,15 +723,25 @@ class Game {
                         pDy = dy;
                     }
                     
+                    let anyMoved = false;
                     this.players.forEach(p => {
                         if (p.canMove(dx, dy) && !this.players.some(other => other !== p && other.gridX === (p.gridX + dx) && other.gridY === (p.gridY + dy))) {
                             p.startMove(dx, dy);
+                            anyMoved = true;
                         } else if (!p.isParent) {
                             // If clone is blocked, still force its faces to mimic the parent IF the parent moved
                             // Or if the parent didn't move but the clone DID move, we still need them to sync
                             // Instead of complex logic here, we'll brute-force sync the faces in update()
                         }
                     });
+                    
+                    // Trigger 3D cube roll animation
+                    if (anyMoved) {
+                        if (dy === -1) this.triggerCubeAnimation('roll-up');
+                        else if (dy === 1) this.triggerCubeAnimation('roll-down');
+                        else if (dx === -1) this.triggerCubeAnimation('roll-left');
+                        else if (dx === 1) this.triggerCubeAnimation('roll-right');
+                    }
                 }
             }
         }

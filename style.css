@@ -206,8 +206,60 @@ h1 {
     height: 100%;
     position: relative;
     transform-style: preserve-3d;
-    /* Static isometric projection */
+    /* Base isometric projection — animated via JS */
     transform: translateZ(-40px) rotateX(-20deg) rotateY(-45deg);
+    transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Roll tilt animations triggered by adding a class momentarily */
+#cube.roll-up {
+    animation: cubeRollUp 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+#cube.roll-down {
+    animation: cubeRollDown 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+#cube.roll-left {
+    animation: cubeRollLeft 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+#cube.roll-right {
+    animation: cubeRollRight 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+#cube.spin-cw {
+    animation: cubeSpinCW 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+#cube.spin-ccw {
+    animation: cubeSpinCCW 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes cubeRollUp {
+    0%   { transform: translateZ(-40px) rotateX(-20deg) rotateY(-45deg); }
+    40%  { transform: translateZ(-40px) rotateX(70deg)  rotateY(-45deg); }
+    100% { transform: translateZ(-40px) rotateX(-20deg) rotateY(-45deg); }
+}
+@keyframes cubeRollDown {
+    0%   { transform: translateZ(-40px) rotateX(-20deg) rotateY(-45deg); }
+    40%  { transform: translateZ(-40px) rotateX(-110deg) rotateY(-45deg); }
+    100% { transform: translateZ(-40px) rotateX(-20deg) rotateY(-45deg); }
+}
+@keyframes cubeRollLeft {
+    0%   { transform: translateZ(-40px) rotateX(-20deg) rotateY(-45deg); }
+    40%  { transform: translateZ(-40px) rotateX(-20deg) rotateY(-135deg); }
+    100% { transform: translateZ(-40px) rotateX(-20deg) rotateY(-45deg); }
+}
+@keyframes cubeRollRight {
+    0%   { transform: translateZ(-40px) rotateX(-20deg) rotateY(-45deg); }
+    40%  { transform: translateZ(-40px) rotateX(-20deg) rotateY(45deg); }
+    100% { transform: translateZ(-40px) rotateX(-20deg) rotateY(-45deg); }
+}
+@keyframes cubeSpinCW {
+    0%   { transform: translateZ(-40px) rotateX(-20deg) rotateY(-45deg); }
+    50%  { transform: translateZ(-40px) rotateX(-20deg) rotateY(-135deg); }
+    100% { transform: translateZ(-40px) rotateX(-20deg) rotateY(-45deg); }
+}
+@keyframes cubeSpinCCW {
+    0%   { transform: translateZ(-40px) rotateX(-20deg) rotateY(-45deg); }
+    50%  { transform: translateZ(-40px) rotateX(-20deg) rotateY(45deg); }
+    100% { transform: translateZ(-40px) rotateX(-20deg) rotateY(-45deg); }
 }
 
 .cube-face {
