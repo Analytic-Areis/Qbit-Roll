@@ -66,8 +66,7 @@ The orientation of your cube determines your active quantum state on the top fac
 ├── index.html        # Main HTML entry point and HUD interface
 ├── game.js           # Three.js scene, quantum state logic, level engine, and physics
 ├── lessons.js        # Interactive SVG quantum circuit diagrams and lesson popups
-├── style.css         # Glassmorphism UI styling and animations
-└── qubit-roll.zip    # Ready-to-upload bundle for itch.io / web deployment
+└── style.css         # Glassmorphism UI styling and animations
 ```
 
 ---
@@ -91,7 +90,8 @@ The orientation of your cube determines your active quantum state on the top fac
 ## 🌐 Deploying to Itch.io
 
 To deploy as a playable browser game on [itch.io](https://itch.io):
-1. Create a new project and set **Kind of project** to **HTML**.
-2. Upload the `qubit-roll.zip` package.
-3. Check the box **"This file will be played in the browser"**.
-4. Set the embed dimensions to **1280 × 720** and enable the **Fullscreen button**.
+1. Create a zip of the root files (`index.html`, `game.js`, `lessons.js`, `style.css`).
+2. Create a new project on itch.io and set **Kind of project** to **HTML**.
+3. Upload the `.zip` archive.
+4. Check the box **"This file will be played in the browser"**.
+5. Set the embed dimensions to **1280 × 720** and enable the **Fullscreen button**.
