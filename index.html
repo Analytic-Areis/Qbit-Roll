@@ -1,120 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Qbit Roll</title>
+    <title>Qubit Roll: Quantum Puzzle Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
-    <div id="game-container">
-        <!-- Left UI Pane -->
-        <div id="left-pane">
-            <div id="header">
-                <div id="header-text">
-                    <h1>Qbit Roll</h1>
-                    <div id="face-indicator">
-                        <span id="face-icon"></span>
-                        <p id="top-face">Top Face: <span id="face-name">INERT_1</span></p>
+
+<canvas id="game-canvas"></canvas>
+
+<div id="ui-layer">
+    <div class="sidebar">
+        <div>
+            <h1>Qubit Roll</h1>
+            <p class="text-slate-400 text-sm mt-1 uppercase tracking-widest font-semibold">2.5D Quantum Engine</p>
+        </div>
+
+        <div class="glass-panel">
+            <div class="flex justify-between items-center mb-3">
+                <span class="text-slate-300 font-bold uppercase tracking-wider text-xs">Qubit State:</span>
+                <span id="ui-top-state" class="badge inert">|0⟩</span>
+            </div>
+            <div id="psi-readout" class="text-sm font-mono text-slate-200">|ψ⟩ = |0⟩</div>
+            <div id="interf-readout" class="text-[11px] text-fuchsia-300 mt-1"></div>
+        </div>
+
+        <div class="glass-panel flex-grow flex flex-col">
+            <h3 class="text-white font-bold uppercase tracking-widest text-xs text-center mb-2">Bloch Sphere State</h3>
+            <div id="bloch-container" class="mb-4">
+                <!-- 2D Canvas overlay for drawing the vector -->
+                <canvas id="bloch-canvas"></canvas>
+            </div>
+            
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Probability Amplitudes</div>
+            <div class="flex flex-col gap-2 w-full text-xs font-semibold text-slate-300">
+                <div class="flex items-center gap-2">
+                    <span class="w-10">P(|0⟩)</span>
+                    <div class="flex-grow bg-slate-800 h-2 rounded-full overflow-hidden">
+                        <div id="prob-0" class="bg-[#3b82f6] h-full transition-all duration-300" style="width: 100%"></div>
                     </div>
+                    <span id="prob-0-val" class="w-8 text-right">100%</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-10">P(|1⟩)</span>
+                    <div class="flex-grow bg-slate-800 h-2 rounded-full overflow-hidden">
+                        <div id="prob-1" class="bg-[#3b82f6] h-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <span id="prob-1-val" class="w-8 text-right">0%</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-10">P(|+⟩)</span>
+                    <div class="flex-grow bg-slate-800 h-2 rounded-full overflow-hidden">
+                        <div id="prob-plus" class="bg-[#ef4444] h-full transition-all duration-300" style="width: 50%"></div>
+                    </div>
+                    <span id="prob-plus-val" class="w-8 text-right">50%</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-10">P(|-⟩)</span>
+                    <div class="flex-grow bg-slate-800 h-2 rounded-full overflow-hidden">
+                        <div id="prob-minus" class="bg-[#a855f7] h-full transition-all duration-300" style="width: 50%"></div>
+                    </div>
+                    <span id="prob-minus-val" class="w-8 text-right">50%</span>
                 </div>
             </div>
+        </div>
+    </div>
+    
+    <div id="hud-top">
+        <div id="level-title">Initialization</div>
+        <div id="action-hint">Loading quantum states...</div>
+    </div>
+    
+    <div id="prediction-panel" class="absolute bottom-8 right-8 glass-panel pointer-events-auto flex flex-col gap-4 text-sm font-semibold tracking-wider">
+        <div class="flex items-center justify-between">
+            <span class="text-slate-400 w-24 text-right pr-4 uppercase">UP: W / ↑ :</span>
+            <div id="pred-up" class="pred-badge inert flex-1 text-center py-2 rounded-lg transition-colors">Inert</div>
+        </div>
+        <div class="flex items-center justify-between">
+            <span class="text-slate-400 w-24 text-right pr-4 uppercase">DOWN: S / ↓ :</span>
+            <div id="pred-down" class="pred-badge inert flex-1 text-center py-2 rounded-lg transition-colors">Inert</div>
+        </div>
+        <div class="flex items-center justify-between">
+            <span class="text-slate-400 w-24 text-right pr-4 uppercase">LEFT: A / ← :</span>
+            <div id="pred-left" class="pred-badge inert flex-1 text-center py-2 rounded-lg transition-colors">Inert</div>
+        </div>
+        <div class="flex items-center justify-between">
+            <span class="text-slate-400 w-24 text-right pr-4 uppercase">RIGHT: D / → :</span>
+            <div id="pred-right" class="pred-badge inert flex-1 text-center py-2 rounded-lg transition-colors">Inert</div>
+        </div>
+    </div>
 
-            <div id="instructions-container">
-                <div id="instructions">WASD: Roll | SPACE: Ability</div>
-            </div>
+    <div id="toast-container"></div>
 
-            <div id="preview-panel">
-                <div id="predictions">
-                    <div class="pred-row">
-                        <span class="pred-label">UP: W / &uarr;</span>
-                        <span class="pred-colon">:</span>
-                        <span id="pred-up">Inert</span>
-                    </div>
-                    <div class="pred-row">
-                        <span class="pred-label">DOWN: S / &darr;</span>
-                        <span class="pred-colon">:</span>
-                        <span id="pred-down">Inert</span>
-                    </div>
-                    <div class="pred-row">
-                        <span class="pred-label">LEFT: A / &larr;</span>
-                        <span class="pred-colon">:</span>
-                        <span id="pred-left">Inert</span>
-                    </div>
-                    <div class="pred-row">
-                        <span class="pred-label">RIGHT: D / &rarr;</span>
-                        <span class="pred-colon">:</span>
-                        <span id="pred-right">Inert</span>
-                    </div>
+    
+
+</div>
+
+<div id="menu-screen" class="screen">
+    <div class="flex flex-col items-center max-w-4xl w-full">
+        <h1 class="title-massive text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-emerald-400">Qubit Roll</h1>
+        <p class="text-xl text-slate-300 mb-12 uppercase tracking-[0.3em] font-semibold">Educational Puzzle Engine</p>
+        
+        <div class="flex gap-12 w-full justify-center">
+            <!-- Level Buttons -->
+            <div id="level-buttons" class="flex flex-col gap-4 w-1/2 px-4 overflow-y-auto max-h-[55vh]"></div>
+            
+            <!-- Controls Section -->
+            <div class="glass-panel text-sm text-slate-400 leading-relaxed w-1/2 p-6 flex flex-col justify-center">
+                <strong class="text-white block mb-4 uppercase tracking-wider text-xl border-b border-slate-700 pb-2">Controls</strong>
+                <div class="grid grid-cols-2 gap-y-4 mb-6 font-semibold text-base">
+                    <div>WASD / Arrows</div><div class="text-slate-200">Roll Cube</div>
+                    <div>SPACE</div><div class="text-slate-200">State Ability</div>
+                    <div>R</div><div class="text-slate-200">Restart Level</div>
+                    <div>ESC</div><div class="text-slate-200">Menu</div>
                 </div>
-                <div class="cube-wrapper">
-                    <p id="rotate-hint">Q/E: Rotate in place</p>
-                    <div id="scene">
-                        <div id="cube">
-                            <div class="cube-face cube-front"></div>
-                            <div class="cube-face cube-right"></div>
-                            <div class="cube-face cube-top">
-                                <div class="cube-arrow"></div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="border-t border-slate-700 pt-6 grid grid-cols-1 gap-3 font-bold uppercase tracking-wider">
+                    <div style="color:var(--neon-red)">|0⟩ RED (SPACE + DIR): Dash</div>
+                    <div style="color:var(--neon-blue)">|1⟩ BLUE (SPACE + DIR): Two-Path Split · SPACE: Recombine</div>
+                    <div style="color:var(--neon-green)">|+⟩ GREEN (SPACE + DIR): Tunnel Wall</div>
+                    <div style="color:var(--neon-orange)">|−⟩ ORANGE (SPACE): Quantum Walk Timeline</div>
+                    <div style="color:var(--neon-cyan)">H TILE: Hadamard · <span style="color:#f43f5e">X TILE: Bit Flip</span> · <span style="color:var(--neon-magenta)">Z TILE: Phase Flip</span></div>
                 </div>
             </div>
         </div>
-
-        <!-- Right Game Pane -->
-        <div id="right-pane">
-            <div id="level-name-display" class="hidden"></div>
-            <div id="powerup-container"></div>
-            <canvas id="gameCanvas"></canvas>
-        </div>
     </div>
+</div>
 
-    <div id="level-menu" class="fullscreen-overlay">
-        <h1 class="gradient-text">SELECT LEVEL</h1>
-        <div id="level-grid">
-            <!-- Level buttons dynamically injected here -->
-        </div>
+<div id="gameover-screen" class="screen hidden">
+    <h1 class="title-massive text-red-500" style="text-shadow: 0 0 40px rgba(239,68,68,0.5)">DECOHERENCE</h1>
+    <p id="death-reason" class="text-xl text-slate-300 mb-12 font-semibold tracking-wider">Wavefunction collapsed unexpectedly.</p>
+    <div class="flex gap-4">
+        <button class="btn" onclick="game.restartLevel()">Retry (R)</button>
+        <button class="btn" onclick="game.showMenu()">Menu (ESC)</button>
     </div>
+</div>
 
-    <div id="game-over-screen" class="hidden fullscreen-overlay">
-        <h1 class="red-text">YOU DIED</h1>
-        <p class="restart-prompt">Press R to Restart</p>
+<div id="win-screen" class="screen hidden">
+    <h1 class="title-massive text-emerald-400" style="text-shadow: 0 0 40px rgba(16,185,129,0.5)">UNITARY SUCCESS</h1>
+    <p class="text-xl text-slate-300 mb-12 font-semibold tracking-wider">Algorithm executed perfectly.</p>
+    <div class="flex gap-4">
+        <button class="btn" onclick="game.nextLevel()">Next Level (R)</button>
+        <button class="btn" onclick="game.showMenu()">Menu (ESC)</button>
     </div>
-    <div id="win-screen" class="hidden fullscreen-overlay">
-        <h1 class="green-text">WINNER!</h1>
-        <p class="restart-prompt">Press R to Restart</p>
-    </div>
+</div>
 
-    <button id="menu-btn">☰</button>
-
-    <aside id="rules-sidebar" class="hidden">
-        <button id="close-sidebar">&times;</button>
-        <h2>Game Rules</h2>
-        <ul>
-            <li><strong>Roll:</strong> Use WASD or Arrows to move your cube.</li>
-            <li><strong>Rotate:</strong> Q and E spin the cube in place.</li>
-            <li><strong>Red Face (Dash):</strong> Dashing lets you slide 2 tiles instantly. You must use this to kill
-                Red Enemies.</li>
-            <li><strong>Blue Face (Split):</strong> Schrodinger's Split divides you into two entangled cubes. Press
-                SPACE again to instantly collapse back to the Parent (<span style="color:#fef08a">★</span>).</li>
-            <li><strong>Green Face (Tunnel):</strong> Quantum Tunneling allows you to step directly through a wall into
-                the next space.</li>
-            <li><strong>Cyan Enemies:</strong> These are entangled. You must hit one while you are also Split (Blue) to
-                kill it.</li>
-        </ul>
-
-        <div id="hint-container">
-            <button id="toggle-hint-btn">Show Tactical Hint</button>
-            <p id="level-hint" class="hidden"></p>
-        </div>
-    </aside>
-
-    <script src="levels.js"></script>
-    <script src="game.js"></script>
+<script src="game.js"></script>
+<script src="lessons.js"></script>
 </body>
-
 </html>
