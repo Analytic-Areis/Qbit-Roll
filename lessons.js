@@ -100,8 +100,11 @@ const LESSONS = {
  body: `<p>Every quantum gate is <b>unitary</b>: it preserves total probability and can be <b>undone</b>. H, X and Z are each their own inverse:</p>
  <p style="text-align:center"><b>H·H = X·X = Z·Z = I</b> (identity)</p>
  <p>No information is lost by a gate, only measurement destroys it. To get back where you started, simply run the circuit <b>backwards</b>.</p>`,
- figs: [fig(circuit([['H',C.g],['H',C.g],['=','#475569'],['I','#64748b']]),'Two Hadamards cancel.'), fig(circuit([['H',C.g],['Z',C.m],['Z',C.m],['H',C.g]]),'Forward then reversed: back to |0⟩.')],
- tip: 'Reverse order matters: undo the LAST gate first (Z, then H).' },
+ figs: [fig(circuit([['H',C.g],['H',C.g],['=','#475569'],['I','#64748b']]),'Two Hadamards cancel.'), fig(circuit([['H',C.g],['Z',C.m],['Z',C.m],['H',C.g]]),'Forward then reversed: back to |0⟩.'), fig(circuit([['X','#f43f5e'],['Z',C.m],['X','#f43f5e'],['Z',C.m],['=','#475569'],['−I','#64748b']]),'XZXZ = −I: identity with a flipped sign.')],
+ tip: 'Reverse order matters: undo the LAST gate first (Z, then H).',
+ extra: `<p><b>I (identity)</b> does nothing: I|ψ⟩ = |ψ⟩. <b>−I</b> multiplies the whole state by −1: −I|ψ⟩ = −|ψ⟩. Because X and Z <i>anti-commute</i> (XZ = −ZX), a loop like X·Z·X·Z gives −I, not I.</p>
+ <p>−|ψ⟩ is the <b>same point on the Bloch sphere</b> and gives the same measurement odds: a <b>global phase</b> that nothing can detect. Example: X|−⟩ = −|−⟩, so X leaves |−⟩ looking unchanged.</p>
+ <p>Careful: a −1 on only <i>one branch</i> of a superposition is a <b>relative phase</b>, and it is exactly what makes interference cancel.</p>` },
 
 5: { title: 'Superposition of Positions',
  body: `<p>With a |1⟩ qubit (BLUE) the <b>Two-Path Split</b> puts <i>one</i> qubit into a superposition of <i>two places at once</i>: |ψ⟩ = (|a⟩ + |b⟩)/√2.</p>
@@ -139,6 +142,13 @@ const LESSONS = {
  <p>A lone hit does nothing, the correlation is what counts, just like measuring one half of an entangled pair.</p>`,
  figs: [fig(flow('sync'),'Synchronised timelines must hit together.')],
  tip: 'Each timeline has different walls, so the same key press can steer them differently.' },
+
+12: { title: 'Final Circuit: Global vs Relative Phase',
+ body: `<p>Time to combine everything. Two ideas decide this level:</p>
+ <p><b>1. Global phase (−I) is invisible.</b> X|−⟩ = −|−⟩. The state gets a minus sign overall, but it is still |−⟩ for the boss. So an X tile does not break your |−⟩.</p>
+ <p><b>2. Basis matters.</b> The Z-detector passes |0⟩, the X-detector passes |+⟩, and the boss needs |−⟩. Plan gates (H, Z, X) so you arrive in the right state at each one, and remember Dash can hop over a gate tile.</p>`,
+ figs: [fig(bloch([[PX,'|+⟩',C.g,-30,16],[MX,'|−⟩',C.o,-30,-4]],[],{p:MX,c:C.o}),'|−⟩ and −|−⟩ are the same point.'), fig(circuit([['H',C.g],['Z',C.m],['X','#f43f5e']]),'|0⟩ → |+⟩ → |−⟩ → −|−⟩ (still |−⟩)')],
+ tip: 'Global sign: ignore it. Sign between branches: always track it.' },
 
 11: { title: 'Entangled Paths (Split Branches)',
  body: `<p>The same idea applies to the Two-Path Split: the two branches of the |1⟩ qubit move in lockstep, but <b>obstacles bend each one differently</b>. Their positions become <b>correlated</b>, so the choice of split direction decides where both branches end up.</p>
@@ -183,7 +193,7 @@ let current = null; const seen = new Set();
 function open(i) {
   const L = LESSONS[i]; if (!L) return;
   current = i; seen.add(i);
-  $('lz-title').textContent = L.title; $('lz-body').innerHTML = L.body;
+  $('lz-title').textContent = L.title; $('lz-body').innerHTML = L.body + (L.extra||'');
   $('lz-figs').innerHTML = L.figs.join(''); $('lz-tip').innerHTML = '💡 ' + L.tip;
   $('lz-scroll').scrollTop = 0; ov.classList.add('show');
 }
